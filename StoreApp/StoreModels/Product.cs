@@ -8,6 +8,7 @@ namespace StoreModels
             this.ISBN = ISBN;
             this.Name = Name;
         }
+        public Product(){}
 
         public double Price { get; set; }
         public string ISBN { get; set; }
@@ -15,7 +16,7 @@ namespace StoreModels
     
         public override string ToString()
         {
-            return this.Name + " : $" + this.Price + "\n" + "ISBN: " + this.ISBN;
+            return this.Name + " : $" + this.Price + "\t" + "ISBN: " + this.ISBN;
         }
         
     }

@@ -1,7 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <ProjectReference Include="..\StoreBL\StoreBL.csproj" />
     <ProjectReference Include="..\StoreModels\StoreModels.csproj" />
+    <ProjectReference Include="..\StoreDL\StoreDL.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

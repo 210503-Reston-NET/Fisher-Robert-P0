@@ -2,10 +2,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\StoreModels\StoreModels.csproj" />
+    <ProjectReference Include="..\StoreDL\StoreDL.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 

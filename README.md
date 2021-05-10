@@ -1,2 +1,2 @@
-# Fisher-Robert-P0
-Manages transactions between Customer and Store, keeping records of orders
+# StoreAppTemplate
+Template for the .NET P0 Store App

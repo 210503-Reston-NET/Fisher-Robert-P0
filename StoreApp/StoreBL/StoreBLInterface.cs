@@ -5,6 +5,6 @@ namespace StoreBL
 {
     public interface StoreBLInterface
     {
-        List<Product> GetInventory (string address);
+        List<Product> GetInventory ();
     }
 }
