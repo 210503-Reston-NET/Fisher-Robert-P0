@@ -9,7 +9,7 @@ namespace StoreUI
 {
     public class OrderMenu : StoreMenu
     {
-        public void Start()
+        public override void Start()
         {
             // Create a List of products available to the User
             bool repeat = true;
@@ -44,8 +44,7 @@ namespace StoreUI
 
                 foreach (Product product in Products)
                 {
-                    System.Console.WriteLine("[" + index + "] : " + product.ToString());
-                    index++;
+                    System.Console.WriteLine("[" + index++ + "] : " + product.ToString());
                 }
 
                 System.Console.WriteLine("[" + index + "] Exit");
