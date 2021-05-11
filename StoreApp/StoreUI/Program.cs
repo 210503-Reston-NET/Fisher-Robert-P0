@@ -10,7 +10,7 @@ namespace StoreUI
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            StoreMenu index = new LoginMenu();
+            Accessible index = new LoginMenu();
             index.Start();
         }
     }

@@ -11,7 +11,7 @@ namespace StoreUI
     {
         StoreBussinessLayer bussinessLayer = new StoreBussinessLayer(new FileRepo());
         MyValidate validate = new StringValidator();
-        public void Start()
+        public override void Start()
         {
             string output = "--------Edit Product--------" + "\n";
                 output += "Please make a selection." + "\n";
@@ -46,7 +46,9 @@ namespace StoreUI
 
                         
                         break;
+                    // Case Invalid Entry
                     default:
+                        System.Console.WriteLine("Invalid entry! Please try again.");
                         break;
                 }
         }

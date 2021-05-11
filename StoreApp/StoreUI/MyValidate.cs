@@ -6,5 +6,6 @@ namespace StoreUI
     {
         string ValidateString (string prompt);
         double ValidateDouble (string prompt);
+        int ValidateInteger (string promt);
     }
 }

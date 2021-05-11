@@ -7,7 +7,7 @@ namespace StoreUI
 {
     public class LoginMenu : StoreMenu
     {
-        public void Start()
+        public override void Start()
         {
             MyValidate validate = new StringValidator();
             StoreMenu TargetMenu;
@@ -74,12 +74,14 @@ namespace StoreUI
                         if (user==cust.UserName && pass == cust.Password)
                         {
                             TargetMenu = new HomeMenu();
+                            TargetMenu.CurrentUser = cust;
                             TargetMenu.Start();
                             repeat = false;
                             break;
                         }
+                        else 
+                            System.Console.WriteLine("Sorry, This username and Password combination is Invalid!");
                     }
-                    System.Console.WriteLine("Sorry, This username and Password combination is Invalid!");
                     break;
                 // Case: Exit
                 case "2":

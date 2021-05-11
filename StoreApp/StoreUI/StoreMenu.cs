@@ -1,8 +1,13 @@
+using StoreModels;
+
 namespace StoreUI
 {
-    public interface StoreMenu
+    public class StoreMenu : Accessible
     {
-        // Note: Every instance of StoreMenu implement a Validator; Consider Encapsulation via Abstraction + this Interface
-        void Start();
+        public User CurrentUser { get; set; }
+
+        public virtual void Start()
+        {
+        }
     }
 }
