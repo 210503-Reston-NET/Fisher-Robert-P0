@@ -7,12 +7,15 @@ namespace StoreUI
 {
     public class LoginMenu : StoreMenu
     {
+        private const int ManagerCode = 4321;
         public override void Start()
         {
             MyValidate validate = new StringValidator();
             StoreMenu TargetMenu;
             StoreBussinessLayer bussinessLayer = new StoreBussinessLayer(new FileRepo());
             bool repeat = true;
+
+            
 
             do{
             // Current Menu selector using Console as an output
@@ -46,6 +49,23 @@ namespace StoreUI
 
                     output = "Please confirm your password";
                     string confirm = validate.ValidateString(output);
+
+                    do {
+                        output = "Enter your manager code. If you are not a manager, just enter 1.";
+                        int UserCode = validate.ValidateInteger(output);
+
+                        if (UserCode == 4321){
+                            this.CurrentUser.IsManager = true;
+                            break;
+                        }
+                        if (UserCode == 1){
+                            this.CurrentUser.IsManager = false;
+                            break;
+                        }
+                        else
+                            System.Console.WriteLine("Your input doesnt match any manager code. Please enter a valid code.");
+                    } while(true);
+
 
                     if (password != confirm)
                         System.Console.WriteLine("Please make sure your passwords match!");
