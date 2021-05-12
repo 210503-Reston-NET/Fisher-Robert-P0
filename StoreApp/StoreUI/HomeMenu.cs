@@ -20,8 +20,12 @@ namespace StoreUI
                 output += "Please make a selection." + "\n";
                 output += "["+ index++ +"] Order Product." + "\n";
                 Options.Add(new OrderMenu());
-                output += "["+ index++ +"] Add Product." + "\n";
-                Options.Add(new EditProductMenu());
+
+                if (this.CurrentUser.IsManager){
+                    output += "["+ index++ +"] Add Product." + "\n";
+                    Options.Add(new EditProductMenu());
+                }
+                
                 output += "["+ index +"+] Exit." + "\n";
 
                 int input = validate.ValidateInteger(output);
@@ -35,6 +39,8 @@ namespace StoreUI
                     TargetMenu.CurrentUser = this.CurrentUser;
                     TargetMenu.Start();
             } while (repeat);
+
+            System.Console.WriteLine("Thanks for stopping by. Have a great day!");
         }
     }
 }
