@@ -7,11 +7,11 @@ using System.Linq;
 
 namespace StoreDL
 {
-    public class FileRepo : IRepo
+    public class FileRepo 
     {
-        private const string ProductFilePath = "../StoreDL/Products.json";
-        private const string OrderFilePath = "../StoreDL/Orders.json";
-        private const string CustomerFilePath = "../StoreDL/Customers.json";
+        private const string ProductFilePath = "../StoreDL/JsonFiles/Products.json";
+        private const string OrderFilePath = "../StoreDL/JsonFiles/Orders.json";
+        private const string CustomerFilePath = "../StoreDL/JsonFiles/Customers.json";
         private string JsonString;
         /// <summary>
         /// Returns all products recorded
@@ -55,11 +55,6 @@ namespace StoreDL
             return true;
         }
 
-        public List<Product> GetProductsFor(Location Location)
-        {
-            throw new NotImplementedException();
-        }
-
         public Customer GetCustomer(Customer customer)
         {
             throw new NotImplementedException();
@@ -97,11 +92,6 @@ namespace StoreDL
         }
 
         public List<Order> GetOrdersFor(Customer Customer)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<Order> GetOrdersFor(Location Location)
         {
             throw new NotImplementedException();
         }
@@ -144,6 +134,21 @@ namespace StoreDL
         }
 
         public Order GetOrder(Order order)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool AddStore(Store store)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Store GetStore(Store store)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Store> GetAllStores()
         {
             throw new NotImplementedException();
         }

@@ -70,5 +70,26 @@ namespace StoreUI
             } while (repeat);
             return response;
         }
+
+        public decimal ValidateDecimal(string prompt)
+        {
+            decimal response = 0.00M;
+            bool repeat = true;
+            do
+            {
+                try 
+                {
+                    Console.WriteLine(prompt);
+                    response = decimal.Parse(Regex.Replace(Console.ReadLine(), "[^.0-9_]+", " "));
+
+                    repeat = false;
+                } catch(Exception e)
+                {
+                    System.Console.WriteLine(e.Message);
+                    System.Console.WriteLine("Please input a vaild Price (Include Integers and Decimal Points");
+                }
+            } while (repeat);
+            return response;
+        }
     }
 }

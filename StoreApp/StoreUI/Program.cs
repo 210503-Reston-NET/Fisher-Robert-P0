@@ -1,4 +1,5 @@
 ﻿using System;
+using StoreModels;
 
 namespace StoreUI
 {
@@ -10,8 +11,7 @@ namespace StoreUI
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            Accessible index = new LoginMenu();
-            index.Start();
+            MenuFactory.GetMenu("login", new Customer("", "", "", "")).Start();
         }
     }
 }

@@ -2,7 +2,7 @@ namespace StoreModels
 {
     public class Product
     {
-        public Product(double Price, string ISBN, string Name)
+        public Product(decimal Price, string ISBN, string Name)
         {
             this.Price = Price;
             this.ISBN = ISBN;
@@ -10,7 +10,7 @@ namespace StoreModels
         }
         public Product(){}
 
-        public double Price { get; set; }
+        public decimal Price { get; set; }
         public string ISBN { get; set; }
         public string Name { get; set; }
     

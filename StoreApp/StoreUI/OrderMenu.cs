@@ -9,6 +9,13 @@ namespace StoreUI
 {
     public class OrderMenu : StoreMenu
     {
+        StoreBLInterface bussinessLayer;
+        User CurrentUser;
+        public OrderMenu(StoreBLInterface BL, User PassedUser)
+        {
+            bussinessLayer = BL;
+            CurrentUser = PassedUser;
+        }
         public override void Start()
         {
             // Create a List of products available to the User
@@ -19,7 +26,6 @@ namespace StoreUI
             /// <typeparam name="Product"></typeparam>
             /// <returns></returns>
             List<Product> Products = new List<Product>(); 
-            StoreBussinessLayer bussinessLayer = new StoreBussinessLayer(new FileRepo());
             
             Products = bussinessLayer.GetInventory();
             // Populate the options with available options

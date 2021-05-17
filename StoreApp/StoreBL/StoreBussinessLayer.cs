@@ -6,14 +6,15 @@ namespace StoreBL
 {
     public class StoreBussinessLayer : StoreBLInterface
     {
-        private IRepo _repo;
-        public StoreBussinessLayer(IRepo repo)
+        private DAO _repo;
+        private RepoDB _repoDB;
+        public StoreBussinessLayer(RepoDB repo)
         {
-            _repo = repo;
+            _repoDB = repo;
         }
         public List<Product> GetInventory()
         {
-            return _repo.GetProducts();
+            return _repoDB.GetProducts();
         }
         public bool AddProduct(Product product)
         {
@@ -25,11 +26,36 @@ namespace StoreBL
         }
         public bool AddCustomer(Customer customer)
         {
-            return _repo.AddCustomer(customer);
+            return _repoDB.AddCustomer(customer);
         }
-        public List<Customer> GetCustomers()
+        public List<Customer> GetAllCustomers()
         {
-            return _repo.GetCustomers();
+            return _repoDB.GetCustomers();
+        }
+
+        public Customer GetCustomer(Customer customer)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Product GetProduct(Product product)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public List<Product> GetAllProducts()
+        {
+            return _repoDB.GetProducts();
+        }
+
+        public User GetUser(string UserName, string UserPassword)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public List<User> GetAllUsers()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

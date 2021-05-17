@@ -8,14 +8,17 @@ namespace StoreUI
     public class LoginMenu : StoreMenu
     {
         private const int ManagerCode = 4321;
+        MyValidate validate;
+        StoreBLInterface bussinessLayer;
+        DAO _repo;
+        public LoginMenu(StoreBLInterface BL)
+        {
+            validate = new StringValidator();
+            bussinessLayer = BL;
+        }
         public override void Start()
         {
-            MyValidate validate = new StringValidator();
-            StoreMenu TargetMenu;
-            StoreBussinessLayer bussinessLayer = new StoreBussinessLayer(new FileRepo());
             bool repeat = true;
-
-            
 
             do{
             // Current Menu selector using Console as an output
@@ -33,49 +36,51 @@ namespace StoreUI
                     bool confirmed = false;
                     string username = "";
                     string password = "";
+                    string FirstName = "";
+                    string LastName = "";
+                    int UserCode = 1;
 
+                    // Collect Info Necessary to Create a new customer
                     do {
                     output = "Welcome to Bearly Camping!";
                     output += "Please Input your login User Name, or type 1 to escape.";
                     username = validate.ValidateString(output);
 
+                    // Allows a user to escape if this was unintentional
                     if (username == "1"){
                         repeat = false;
                         break;
                     }
 
+                    // Verify Password
                     output = "Now Insert your User Password.";
                     password = validate.ValidateString(output);
 
                     output = "Please confirm your password";
                     string confirm = validate.ValidateString(output);
 
-                    do {
-                        output = "Enter your manager code. If you are not a manager, just enter 1.";
-                        int UserCode = validate.ValidateInteger(output);
+                    // Recieve Full Name 
+                    output = "Enter a First Name";
+                    FirstName = validate.ValidateString(output);
 
-                        if (UserCode == 4321){
-                            this.CurrentUser.IsManager = true;
-                            break;
-                        }
-                        if (UserCode == 1){
-                            this.CurrentUser.IsManager = false;
-                            break;
-                        }
-                        else
-                            System.Console.WriteLine("Your input doesnt match any manager code. Please enter a valid code.");
-                    } while(true);
+                    output = "Enter a Last Name";
+                    LastName = validate.ValidateString(output);
 
-
+                    // Case: Passwords did not match
                     if (password != confirm)
                         System.Console.WriteLine("Please make sure your passwords match!");
                     else
                         confirmed = true;
+                    
+                    // Checks for the correct Manager Code.
+                    output = "Enter your manager code. If you are not a manager, just enter 1.";
+                    UserCode = validate.ValidateInteger(output);
                     }
                     while(!confirmed);
 
-                    Customer customer = new Customer(username, password);
-                    System.Console.WriteLine(customer);
+                    // Add Customer to DB
+                    Customer customer = new Customer(username, password, FirstName, LastName, UserCode);
+                    
                     bool SuccessfulyAdded = bussinessLayer.AddCustomer(customer);
                     System.Console.WriteLine(SuccessfulyAdded);
                     break;
@@ -87,18 +92,18 @@ namespace StoreUI
                     output = "Please Insert your Password.";
                     string pass = validate.ValidateString(output);
 
-                    List<Customer> archive = bussinessLayer.GetCustomers();
+                    // Check Input to saved Users
+                    List<Customer> archive = bussinessLayer.GetAllCustomers();
 
                     foreach (Customer cust in archive)
                     {
                         if (user==cust.UserName && pass == cust.Password)
                         {
-                            TargetMenu = new HomeMenu();
-                            TargetMenu.CurrentUser = cust;
-                            TargetMenu.Start();
+                            MenuFactory.GetMenu("Home", bussinessLayer.GetUser(user, pass)).Start();
                             repeat = false;
                             break;
                         }
+                        // Case: Invalid Username/Password combination
                         else 
                             System.Console.WriteLine("Sorry, This username and Password combination is Invalid!");
                     }
@@ -107,10 +112,12 @@ namespace StoreUI
                 case "2":
                     repeat=false;
                     break;
+                // Case: Unreachable
                 default:
                     throw new System.Exception("You have somehow reached the default case in the LoginMenu switch.\n" +
                     "This message should be unreachable.");
             }
+            // Continue until User escapes
             } while(repeat);
         }
     }
