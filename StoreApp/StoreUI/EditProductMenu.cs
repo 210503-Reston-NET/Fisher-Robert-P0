@@ -9,8 +9,12 @@ namespace StoreUI
 {
     public class EditProductMenu : StoreMenu
     {
-        StoreBussinessLayer bussinessLayer = new StoreBussinessLayer(new FileRepo());
+        StoreBLInterface bussinessLayer;
         MyValidate validate = new StringValidator();
+        public EditProductMenu(StoreBLInterface BL)
+        {
+            this.bussinessLayer = BL;
+        }
         public override void Start()
         {
             string output = "--------Edit Product--------" + "\n";
@@ -25,16 +29,7 @@ namespace StoreUI
                 {
                     // Case: Add Product
                     case "0":
-                        Product item = new Product();
-                
-                        output = "Enter product name: " + "\n";
-                        item.Name = validate.ValidateString(output);
-
-                        output = "Enter product ISBN: " + "\n";
-                        item.ISBN = validate.ValidateString(output);
-
-                        output = "Enter product Price: " + "\n";
-                        item.Price = validate.ValidateDouble(output);
+                        Product item = DefineProductModel();
 
                         bussinessLayer.AddProduct(item);
                         break;
@@ -43,8 +38,6 @@ namespace StoreUI
                     case "1":
                         output = "Enter product ISBN: " + "\n";
                         string isbn_13 = validate.ValidateString(output);
-
-                        
                         break;
                     // Case Invalid Entry
                     default:
