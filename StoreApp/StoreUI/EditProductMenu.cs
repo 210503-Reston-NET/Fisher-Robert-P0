@@ -17,12 +17,18 @@ namespace StoreUI
         }
         public override void Start()
         {
+            bool repeat = true;
+            string isbn_13;
+            Product found;
+            while (repeat){
             string output = "--------Edit Product--------" + "\n";
                 output += "Please make a selection." + "\n";
                 output += "[0] Add Product." + "\n";
                 output += "[1] Remove Product." + "\n";
-                output += "[2] Edit Product." + "\n";
-                output += "[3] Exit." + "\n";
+                output += "[2] Find Product." + "\n";
+                output += "[3] Edit Product." + "\n";
+                output += "[4] Search Users." + "\n";
+                output += "[5] Exit." + "\n";
                 string input = validate.ValidateString(output);
 
                 switch(input)
@@ -37,12 +43,45 @@ namespace StoreUI
                     // Case: Remove Product
                     case "1":
                         output = "Enter product ISBN: " + "\n";
-                        string isbn_13 = validate.ValidateString(output);
+                        isbn_13 = validate.ValidateString(output);
+                        Product ToBeDeleted= bussinessLayer.GetProduct(isbn_13);
+
+                        if (bussinessLayer.RemoveProduct(ToBeDeleted)){
+                            System.Console.WriteLine("Product Successfully Deleted!");
+                        }
+                        break;
+                    // Case: View Product
+                    case "2":
+                        output = "Enter product ISBN: " + "\n";
+                        isbn_13 = validate.ValidateString(output);
+
+                        found = bussinessLayer.GetProduct(isbn_13);
+                        System.Console.WriteLine("--------Selected Product--------\n" + found);
+                        break;
+                    // Case: Edit Product
+                    case "3":
+                        Product EditedProduct = DefineProductModel();
+                        if (bussinessLayer.GetProduct(EditedProduct.ISBN) != null)
+                            if(bussinessLayer.UpdateProduct(EditedProduct))
+                                System.Console.WriteLine("Succesfully edited Product!");
+                        break;
+                    // Case Search Customer
+                    case "4":
+                        output = "Enter the name you wish to search.";
+                        string GivenName = validate.ValidateString(output);
+
+                        
+                        break;
+                    
+                    // Case: Exit
+                    case "5":
+                        repeat = false;
                         break;
                     // Case Invalid Entry
                     default:
                         System.Console.WriteLine("Invalid entry! Please try again.");
                         break;
+                }
                 }
         }
     }

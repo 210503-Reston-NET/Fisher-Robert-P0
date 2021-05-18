@@ -6,10 +6,10 @@ namespace StoreUI
 {
     public class HomeMenu : StoreMenu
     {
-        public bool IsManager { get; set; } = false;
+        public User CurrentUser { get; set;}
         public HomeMenu(User PassedUser)
         {
-            this.CurrentUser = CurrentUser;
+            base.CurrentUser = PassedUser;
         }
         public override void Start()
         {
@@ -26,8 +26,8 @@ namespace StoreUI
                 output += "["+ index++ +"] Order Product." + "\n";
                 Options.Add("Order");
 
-                if (this.CurrentUser.Code == 4321){
-                    output += "["+ index++ +"] Add Product." + "\n";
+                if (base.CurrentUser.Code != null){
+                    output += "["+ index++ +"] Manager Menu." + "\n";
                     Options.Add("EditProduct");
                 }
                 
@@ -38,11 +38,8 @@ namespace StoreUI
                 if(input >= index)
                     break;
                 
-                MenuFactory.GetMenu(Options[input], this.CurrentUser).Start();
-                
-                if (TargetMenu != null)
-                    TargetMenu.CurrentUser = this.CurrentUser;
-                    TargetMenu.Start();
+                MenuFactory.GetMenu(Options[input], base.CurrentUser).Start();
+
             } while (repeat);
 
             System.Console.WriteLine("Thanks for stopping by. Have a great day!");

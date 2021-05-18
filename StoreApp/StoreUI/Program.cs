@@ -11,7 +11,7 @@ namespace StoreUI
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            MenuFactory.GetMenu("login", new Customer("", "", "", "")).Start();
+            MenuFactory.GetMenu("login", new User()).Start();
         }
     }
 }

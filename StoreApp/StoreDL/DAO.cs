@@ -10,18 +10,19 @@ namespace StoreDL
         // NOTE!!: Many of these ideas are repeated and coule be coupled into an Abstract or Interface
         List<Product> GetProducts();
         Product GetProduct(Product product);
-        bool AddProduct(Product product); 
-        Customer GetCustomer(Customer customer);
+        bool AddProduct(Product product);
+        bool RemoveProduct(Product product);
         Order GetOrder(Order order);
-        bool AddOrder(Order order);
-        List<Order> GetOrdersFor(Customer Customer);
-        bool AddCustomer(Customer customer);
-        List<Customer> GetCustomers();
+        Order AddOrder(Order order);
+        List<Order> GetOrdersFor(User Customer);
         bool AddStore(Store store);
         Store GetStore(Store store);
         List<Store> GetAllStores();
         List<User> GetAllUsers();
-        List<Tuple<Product, int>> getInventory(int StoreID);
-        List<Tuple<Product, int>> GetTransactions(int OrderNumber);
+        List<Inventory> getInventory(int StoreID);
+        List<Transaction> GetTransactions(int OrderNumber);
+        User GetUser(string UserName);
+        bool AddUser(User user);
+        bool UpdateProduct(Product product);
     }
 }

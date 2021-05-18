@@ -18,8 +18,6 @@ namespace StoreDL.Entities
         }
 
         public virtual DbSet<Account> Accounts { get; set; }
-        public virtual DbSet<Customer> Customers { get; set; }
-        public virtual DbSet<Employee> Employees { get; set; }
         public virtual DbSet<Inventory> Inventories { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Product> Products { get; set; }
@@ -42,7 +40,7 @@ namespace StoreDL.Entities
             modelBuilder.Entity<Account>(entity =>
             {
                 entity.HasKey(e => e.UserName)
-                    .HasName("PK__Accounts__C9F284571FBA6C3F");
+                    .HasName("PK__Accounts__C9F284575E904043");
 
                 entity.Property(e => e.UserName)
                     .HasMaxLength(30)
@@ -50,18 +48,10 @@ namespace StoreDL.Entities
 
                 entity.Property(e => e.Created).HasColumnType("date");
 
-                entity.Property(e => e.UserPassword)
-                    .IsRequired()
-                    .HasMaxLength(30)
-                    .IsUnicode(false);
-            });
-
-            modelBuilder.Entity<Customer>(entity =>
-            {
-                entity.HasKey(e => e.CustId)
-                    .HasName("PK__Customer__049E3A8952FAF981");
-
-                entity.Property(e => e.CustId).HasColumnName("CustID");
+                entity.Property(e => e.EmployeeId)
+                    .HasMaxLength(3)
+                    .IsUnicode(false)
+                    .HasColumnName("EmployeeID");
 
                 entity.Property(e => e.FirstName)
                     .IsRequired()
@@ -73,46 +63,16 @@ namespace StoreDL.Entities
                     .HasMaxLength(30)
                     .IsUnicode(false);
 
-                entity.Property(e => e.UserName)
+                entity.Property(e => e.UserPassword)
+                    .IsRequired()
                     .HasMaxLength(30)
                     .IsUnicode(false);
-
-                entity.HasOne(d => d.UserNameNavigation)
-                    .WithMany(p => p.Customers)
-                    .HasForeignKey(d => d.UserName)
-                    .HasConstraintName("FK__Customers__UserN__7EF6D905");
-            });
-
-            modelBuilder.Entity<Employee>(entity =>
-            {
-                entity.HasKey(e => e.EmpId)
-                    .HasName("PK__Employee__AF2DBA790DE00DF6");
-
-                entity.Property(e => e.EmpId).HasColumnName("EmpID");
-
-                entity.Property(e => e.CustId).HasColumnName("CustID");
-
-                entity.Property(e => e.StartDate).HasColumnType("date");
-
-                entity.Property(e => e.UserName)
-                    .HasMaxLength(30)
-                    .IsUnicode(false);
-
-                entity.HasOne(d => d.Cust)
-                    .WithMany(p => p.Employees)
-                    .HasForeignKey(d => d.CustId)
-                    .HasConstraintName("FK__Employees__CustI__02C769E9");
-
-                entity.HasOne(d => d.UserNameNavigation)
-                    .WithMany(p => p.Employees)
-                    .HasForeignKey(d => d.UserName)
-                    .HasConstraintName("FK__Employees__UserN__01D345B0");
             });
 
             modelBuilder.Entity<Inventory>(entity =>
             {
                 entity.HasKey(e => new { e.StoreId, e.Isbn })
-                    .HasName("PK__Inventor__9FC5238F4A1BF7FE");
+                    .HasName("PK__Inventor__9FC5238F0DA98ADD");
 
                 entity.ToTable("Inventory");
 
@@ -127,45 +87,50 @@ namespace StoreDL.Entities
                     .WithMany(p => p.Inventories)
                     .HasForeignKey(d => d.Isbn)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Inventory__ISBN__1209AD79");
+                    .HasConstraintName("FK__Inventory__ISBN__68D28DBC");
 
                 entity.HasOne(d => d.Store)
                     .WithMany(p => p.Inventories)
                     .HasForeignKey(d => d.StoreId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Inventory__Store__11158940");
+                    .HasConstraintName("FK__Inventory__Store__67DE6983");
             });
 
             modelBuilder.Entity<Order>(entity =>
             {
                 entity.HasKey(e => e.OrderNumber)
-                    .HasName("PK__Orders__CAC5E7420E963DE3");
-
-                entity.Property(e => e.CustId).HasColumnName("CustID");
+                    .HasName("PK__Orders__CAC5E742D09C3127");
 
                 entity.Property(e => e.DateCreated).HasColumnType("date");
 
                 entity.Property(e => e.StoreId).HasColumnName("StoreID");
 
                 entity.Property(e => e.Total)
-                    .HasColumnType("money")
+                    .HasColumnType("decimal(18, 0)")
                     .HasColumnName("total");
 
-                entity.HasOne(d => d.Cust)
-                    .WithMany(p => p.Orders)
-                    .HasForeignKey(d => d.CustId)
-                    .HasConstraintName("FK__Orders__CustID__09746778");
+                entity.Property(e => e.UserName)
+                    .IsRequired()
+                    .HasMaxLength(30)
+                    .IsUnicode(false);
 
                 entity.HasOne(d => d.Store)
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.StoreId)
-                    .HasConstraintName("FK__Orders__StoreID__0A688BB1");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Orders__StoreID__61316BF4");
+
+                entity.HasOne(d => d.UserNameNavigation)
+                    .WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.UserName)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Orders__UserName__603D47BB");
             });
 
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.HasKey(e => e.Isbn)
-                    .HasName("PK__Products__447D36EB844588E7");
+                    .HasName("PK__Products__447D36EB39395532");
 
                 entity.Property(e => e.Isbn)
                     .HasMaxLength(13)
@@ -184,11 +149,11 @@ namespace StoreDL.Entities
             {
                 entity.Property(e => e.StoreId).HasColumnName("StoreID");
 
-                entity.Property(e => e.StoreAddress)
+                entity.Property(e => e.StoreCity)
                     .HasMaxLength(30)
                     .IsUnicode(false);
 
-                entity.Property(e => e.StoreName)
+                entity.Property(e => e.StoreState)
                     .HasMaxLength(30)
                     .IsUnicode(false);
             });
@@ -196,7 +161,7 @@ namespace StoreDL.Entities
             modelBuilder.Entity<Transaction>(entity =>
             {
                 entity.HasKey(e => new { e.Isbn, e.OrderNumber })
-                    .HasName("PK__Transact__78D1689F99600DE0");
+                    .HasName("PK__Transact__78D1689F4E5DB6E5");
 
                 entity.Property(e => e.Isbn)
                     .HasMaxLength(13)
@@ -207,13 +172,13 @@ namespace StoreDL.Entities
                     .WithMany(p => p.Transactions)
                     .HasForeignKey(d => d.Isbn)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Transactio__ISBN__0D44F85C");
+                    .HasConstraintName("FK__Transactio__ISBN__640DD89F");
 
                 entity.HasOne(d => d.OrderNumberNavigation)
                     .WithMany(p => p.Transactions)
                     .HasForeignKey(d => d.OrderNumber)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Transacti__Order__0E391C95");
+                    .HasConstraintName("FK__Transacti__Order__6501FCD8");
             });
 
             OnModelCreatingPartial(modelBuilder);

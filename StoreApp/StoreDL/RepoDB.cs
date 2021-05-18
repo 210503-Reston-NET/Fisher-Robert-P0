@@ -1,9 +1,10 @@
 using System.Collections.Generic;
-using StoreModels;
+using Models = StoreModels;
 using Entity = StoreDL.Entities;
 using System.Linq;
 using System;
 using System.Data;
+using StoreModels;
 
 namespace StoreDL
 {
@@ -14,69 +15,49 @@ namespace StoreDL
         {
             _context = context;
         }
-        public bool AddCustomer(Customer customer)
-        {
-            try { 
-                _context.Customers.Add(
-                new Entity.Customer
-                {
-                    FirstName = customer.FirstName,
-                    LastName = customer.LastName,
-                    Code = customer.Code,
-                    UserName = customer.UserName
-                });
-                _context.Accounts.Add(
-                new Entity.Account
-                {
-                    UserName = customer.UserName,
-                    UserPassword = customer.Password,
-                    Created = DateTime.Now
-                }
-                );
-                _context.SaveChanges();
-                return true;
-            } 
-            catch (Exception e)
-            {
-                System.Console.WriteLine(e.Message);
-                return false;
-            }
-        }
 
-        public bool AddOrder(Order order)
+        public Models.Order AddOrder(Models.Order order)
         {
             try
             {
-                _context.Orders.Add(
-                    new Entity.Order
-                    {
-                        DateCreated = DateTime.Now,
-                        CustId = order.CustomerID,
+                _context.Orders.Add(new Entity.Order
+                {
+                        DateCreated = order.Create,
+                        UserName = order.UserName,
                         StoreId = order.StoreID,
                         Total = order.Total
-                    }
-                );
-                foreach(Tuple<Product, int> transact in order.Transactions)
-                {
-                    _context.Transactions.Add(
-                        new Entity.Transaction
-                        {
-                            Isbn = transact.Item1.ISBN,
-                            OrderNumber = order.OrderNumber,
-                            Quantity = transact.Item2
-                        }
-                    );
                 }
+                );
                 _context.SaveChanges();
-                return true;
+                return GetOrder(order);
+            } catch(Exception e)
+            {
+                System.Console.WriteLine(e.Message);
+                return null;
+            }
+        }
+
+        public bool AddTransaction(Models.Transaction transact)
+        {
+            try {
+            _context.Transactions.Add(
+                new Entity.Transaction
+                {
+                    OrderNumber = transact.OrderNumber,
+                    Isbn = transact.ISBN,
+                    Quantity = transact.Quantity
+                }
+            );
+            _context.SaveChanges();
             } catch(Exception e)
             {
                 System.Console.WriteLine(e.Message);
                 return false;
             }
+            return true;
         }
 
-        public bool AddProduct(Product product)
+        public bool AddProduct(Models.Product product)
         {
             try
             {
@@ -88,6 +69,7 @@ namespace StoreDL
                         Price = product.Price
                     }
                 );
+                _context.SaveChanges();
                 return true;
             } catch(Exception e)
             {
@@ -96,24 +78,25 @@ namespace StoreDL
             }
         }
 
-        public bool AddStore(Store store)
+        public bool AddStore(Models.Store store)
         {
             try
             {
                 _context.Stores.Add(
                     new Entity.Store
                     {
-                        StoreAddress = store.Address,
-                        StoreName = store.StoreName
+                        StoreCity = store.StoreCity,
+                        StoreState = store.StoreState
                     }
                 );
-                foreach(Tuple<Product, int> inventory in store.Inventory)
+                foreach(Models.Inventory inventory in store.Inventory)
                 {
                     _context.Inventories.Add(
-                        new Entity.Inventory{
+                        new Entity.Inventory
+                        {
                         StoreId = store.storeID,
-                        Isbn = inventory.Item1.ISBN,
-                        Quantity = inventory.Item2
+                        Isbn = inventory.ISBN,
+                        Quantity = inventory.Quantity
                         }
                     );
                 }
@@ -128,71 +111,83 @@ namespace StoreDL
             }
         }
 
-        public List<Store> GetAllStores()
+        public bool AddUser(Models.User user)
+        {
+            try {
+            _context.Accounts.Add(
+                new Entity.Account
+                {
+                    UserName = user.UserName,
+                    UserPassword = user.Password,
+                    Created = user.created,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    EmployeeId = user.Code,
+                    
+                }
+            );
+            _context.SaveChanges();
+            return true;
+            } catch (Exception e)
+            {
+                System.Console.WriteLine(e.Message);
+                return false;
+            }
+        }
+
+        public List<Models.Store> GetAllStores()
         {
             return _context.Stores
             .Select(
-                store => new Store(store.StoreName, store.StoreAddress, getInventory(store.StoreId), store.StoreId)
+                store => new Models.Store(store.StoreCity, store.StoreCity, getInventory(store.StoreId), store.StoreId)
             ).ToList();
         }
 
-        public List<User> GetAllUsers()
+        public List<Models.User> GetAllUsers()
         {
             return _context.Accounts
             .Select(
-                account => new User(account.UserName, account.UserPassword)
+                account => new Models.User(account.UserName, account.UserPassword, account.FirstName, account.LastName, account.EmployeeId, account.Created)
             ).ToList();
         }
 
-        public Customer GetCustomer(Customer customer)
-        {
-            Entity.Customer found = _context.Customers.FirstOrDefault(resto => resto.FirstName == customer.FirstName &&
-            resto.LastName == customer.LastName && resto.Code == customer.Code);
-
-            if (found == null) return null;
-            return new Customer(found.FirstName, found.LastName, found.Code);
-        }
-
-        public List<Customer> GetCustomers()
-        {
-            return _context.Customers
-            .Select(
-                cust => new Customer(cust.FirstName, cust.LastName, cust.Code)
-            ).ToList();
-        }
-
-        public List<Tuple<Product, int>> getInventory(int StoreID)
+        public List<Models.Inventory> getInventory(int StoreID)
         {
             return _context.Inventories.Where(
                 store => store.StoreId == StoreID
                 ).Select(
-                    Inventory => new Tuple<Product, int>
-
-                        (GetProduct(Inventory.Isbn),
-                        Inventory.Quantity)
-
+                    Inventory => new Models.Inventory()
+                    {
+                        ISBN = Inventory.Isbn,
+                        StoreID = Inventory.StoreId,
+                        Quantity = Inventory.Quantity
+                    }
                 ).ToList();
         }
 
-        public Order GetOrder(Order order)
+        public Models.Order GetOrder(Models.Order order)
         {
-            Entity.Order found = _context.Orders.FirstOrDefault(DBOrder => DBOrder.OrderNumber == order.OrderNumber &&
-            DBOrder.StoreId == order.StoreID && DBOrder.CustId == order.CustomerID && DBOrder.Total == order.Total);
-
-            
-
-            if (found == null) return null;
-            return new Order(found.OrderNumber, found.StoreId, found.CustId, found.Total);
+            List<Models.Order> found = _context.Orders.Where(DBOrder => DBOrder.StoreId == order.StoreID &&
+            DBOrder.UserName == order.UserName && DBOrder.DateCreated == order.Create).Select(
+                DBOrder => new Models.Order()
+                {
+                    OrderNumber = DBOrder.OrderNumber,
+                    StoreID = DBOrder.StoreId,
+                    UserName = DBOrder.UserName,
+                    Total = DBOrder.Total,
+                    Create = DBOrder.DateCreated
+                }).ToList();
+            return found[0];
         }
 
-        public List<Order> GetOrdersFor(Customer customer)
+        public List<Models.Order> GetOrdersFor(Models.User customer)
         {
             return _context.Orders.Where(
-                order => order.CustId == customer.CustID).Select(
-                    order => new Order()
+                order => order.UserName == customer.UserName).Select(
+                    order => new Models.Order()
                     {
                         OrderNumber = order.OrderNumber,
-                        CustomerID = customer.CustID,
+                        UserName = customer.UserName,
                         StoreID = order.StoreId,
                         Transactions = GetTransactions(order.OrderNumber),
                         Total = order.Total
@@ -200,43 +195,80 @@ namespace StoreDL
                 ).ToList();
         }
 
-        public Product GetProduct(Product item)
+        public Models.Product GetProduct(Models.Product item)
         {
             return GetProduct(item.ISBN);
         }
-        public Product GetProduct(string ISBN)
+        public Models.Product GetProduct(string ISBN)
         {
             Entity.Product found = _context.Products.FirstOrDefault(product => product.Isbn == ISBN);
 
             if (found == null) return null;
-            return new Product(found.Price, found.Isbn, found.ProductName);
+            return new Models.Product(found.Price, found.Isbn, found.ProductName);
         }
 
-        public List<Product> GetProducts()
+        public List<Models.Product> GetProducts()
         {
-            throw new System.NotImplementedException();
+            return _context.Products.Select(
+                product => new Models.Product()
+                { Price = product.Price,
+                ISBN = product.Isbn,
+                Name = product.ProductName
+                }
+            ).ToList();
         }
 
 
-        public Store GetStore(Store store)
+        public Models.Store GetStore(Models.Store store)
         {
-            Entity.Store found = _context.Stores.FirstOrDefault(DBStore => DBStore.StoreName == store.StoreName &&
-            DBStore.StoreAddress == DBStore.StoreAddress);
-
-            List<Tuple<Product, int>> inventory = getInventory(found.StoreId);
+            Entity.Store found = _context.Stores.FirstOrDefault(DBStore => DBStore.StoreCity == store.StoreCity &&
+            DBStore.StoreState == DBStore.StoreState);
 
             if (found == null) return null;
-            return new Store(found.StoreName, found.StoreAddress, inventory, found.StoreId);
+            List<Models.Inventory> inventory = getInventory(found.StoreId);
+            return new Models.Store(found.StoreCity, found.StoreState, inventory, found.StoreId);
         }
 
-        public List<Tuple<Product, int>> GetTransactions(int OrderNumber)
+        public List<Models.Transaction> GetTransactions(int OrderNumber)
         {
             return _context.Transactions.Where(
                 transaction => transaction.OrderNumber == OrderNumber
             ).Select(
-                transaction => new Tuple<Product, int>
-                (GetProduct(transaction.Isbn), transaction.Quantity)
+                transaction => new Models.Transaction()
+                {
+                    ISBN = transaction.Isbn,
+                    OrderNumber = transaction.OrderNumber,
+                    Quantity = transaction.Quantity
+                }
             ).ToList();
+        }
+
+        public Models.User GetUser(string UserName)
+        {
+            Entity.Account found = _context.Accounts.FirstOrDefault(user => user.UserName == UserName);
+
+            if(found == null) return null;
+            return new Models.User(found.UserName, found.UserPassword, found.FirstName, found.LastName, found.EmployeeId, found.Created);
+
+        }
+
+        public bool RemoveProduct(Product product)
+        {
+            Entity.Product found = _context.Products.First(prod => prod.Isbn == product.ISBN);
+            _context.Products.Remove(found);
+            _context.SaveChanges();
+            return true;
+        }
+
+        public bool UpdateProduct(Product updatedProduct)
+        {
+            Entity.Product found = _context.Products.Find(updatedProduct.ISBN);
+            if (found != null){
+                found.ProductName = updatedProduct.Name;
+                found.Price = updatedProduct.Price;
+                _context.SaveChanges();
+            }
+            return true;
         }
     }
 }

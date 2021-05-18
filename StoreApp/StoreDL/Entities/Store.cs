@@ -14,8 +14,8 @@ namespace StoreDL.Entities
         }
 
         public int StoreId { get; set; }
-        public string StoreAddress { get; set; }
-        public string StoreName { get; set; }
+        public string StoreCity { get; set; }
+        public string StoreState { get; set; }
 
         public virtual ICollection<Inventory> Inventories { get; set; }
         public virtual ICollection<Order> Orders { get; set; }

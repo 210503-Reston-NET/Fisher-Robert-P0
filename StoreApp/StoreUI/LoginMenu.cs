@@ -72,16 +72,13 @@ namespace StoreUI
                     else
                         confirmed = true;
                     
-                    // Checks for the correct Manager Code.
-                    output = "Enter your manager code. If you are not a manager, just enter 1.";
-                    UserCode = validate.ValidateInteger(output);
                     }
                     while(!confirmed);
 
                     // Add Customer to DB
-                    Customer customer = new Customer(username, password, FirstName, LastName, UserCode);
+                    User customer = new User(username, password, FirstName, LastName);
                     
-                    bool SuccessfulyAdded = bussinessLayer.AddCustomer(customer);
+                    bool SuccessfulyAdded = bussinessLayer.AddUser(customer);
                     System.Console.WriteLine(SuccessfulyAdded);
                     break;
                 // Case: Current Customer
@@ -93,20 +90,16 @@ namespace StoreUI
                     string pass = validate.ValidateString(output);
 
                     // Check Input to saved Users
-                    List<Customer> archive = bussinessLayer.GetAllCustomers();
+                    User found = bussinessLayer.GetUser(user, pass);
 
-                    foreach (Customer cust in archive)
+                    if(user != null)
                     {
-                        if (user==cust.UserName && pass == cust.Password)
-                        {
-                            MenuFactory.GetMenu("Home", bussinessLayer.GetUser(user, pass)).Start();
+                        MenuFactory.GetMenu("Home", bussinessLayer.GetUser(user, pass)).Start();
                             repeat = false;
                             break;
-                        }
-                        // Case: Invalid Username/Password combination
-                        else 
-                            System.Console.WriteLine("Sorry, This username and Password combination is Invalid!");
                     }
+                    else 
+                    System.Console.WriteLine("Sorry, This username and Password combination is Invalid!");
                     break;
                 // Case: Exit
                 case "2":
@@ -114,8 +107,8 @@ namespace StoreUI
                     break;
                 // Case: Unreachable
                 default:
-                    throw new System.Exception("You have somehow reached the default case in the LoginMenu switch.\n" +
-                    "This message should be unreachable.");
+                    System.Console.WriteLine("Sorry, this is not a valid option, please enter a number listed.");
+                    break;
             }
             // Continue until User escapes
             } while(repeat);

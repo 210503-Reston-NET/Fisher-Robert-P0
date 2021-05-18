@@ -9,15 +9,16 @@ namespace StoreDL.Entities
     {
         public Account()
         {
-            Customers = new HashSet<Customer>();
-            Employees = new HashSet<Employee>();
+            Orders = new HashSet<Order>();
         }
 
         public string UserName { get; set; }
         public string UserPassword { get; set; }
         public DateTime Created { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string EmployeeId { get; set; }
 
-        public virtual ICollection<Customer> Customers { get; set; }
-        public virtual ICollection<Employee> Employees { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
     }
 }

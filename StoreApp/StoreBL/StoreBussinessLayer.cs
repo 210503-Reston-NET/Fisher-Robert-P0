@@ -12,35 +12,24 @@ namespace StoreBL
         {
             _repoDB = repo;
         }
-        public List<Product> GetInventory()
+        public List<Inventory> GetInventory(int storeID)
         {
-            return _repoDB.GetProducts();
+            return _repoDB.getInventory(storeID);
         }
         public bool AddProduct(Product product)
         {
-            return _repo.AddProduct(product);
+            return _repoDB.AddProduct(product);
         }
         public bool AddOrder(Order order)
         {
-            return _repo.AddOrder(order);
-        }
-        public bool AddCustomer(Customer customer)
-        {
-            return _repoDB.AddCustomer(customer);
-        }
-        public List<Customer> GetAllCustomers()
-        {
-            return _repoDB.GetCustomers();
+            _repoDB.AddOrder(order);
+            return true;
+
         }
 
-        public Customer GetCustomer(Customer customer)
+        public Product GetProduct(string ISBN)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public Product GetProduct(Product product)
-        {
-            throw new System.NotImplementedException();
+            return _repoDB.GetProduct(ISBN);
         }
 
         public List<Product> GetAllProducts()
@@ -48,14 +37,44 @@ namespace StoreBL
             return _repoDB.GetProducts();
         }
 
-        public User GetUser(string UserName, string UserPassword)
+        public User GetUser(string UserName, string Password)
         {
-            throw new System.NotImplementedException();
+            return _repoDB.GetUser(UserName);
         }
 
         public List<User> GetAllUsers()
         {
-            throw new System.NotImplementedException();
+            return _repoDB.GetAllUsers();
+        }
+
+        public bool AddUser(User user)
+        {
+            return _repoDB.AddUser(user);
+        }
+
+        public Store GetStore(Store TargetStore)
+        {
+            return _repoDB.GetStore(TargetStore);
+        }
+
+        public Order GetOrder(Order order)
+        {
+            return _repoDB.GetOrder(order);
+        }
+
+        public bool AddTransaction(Transaction transact)
+        {
+            return _repoDB.AddTransaction(transact);
+        }
+
+        public bool RemoveProduct(Product product)
+        {
+            return _repoDB.RemoveProduct(product);
+        }
+
+        public bool UpdateProduct(Product EditedProduct)
+        {
+            return _repoDB.UpdateProduct(EditedProduct);
         }
     }
 }

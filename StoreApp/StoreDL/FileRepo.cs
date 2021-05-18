@@ -55,24 +55,6 @@ namespace StoreDL
             return true;
         }
 
-        public Customer GetCustomer(Customer customer)
-        {
-            throw new NotImplementedException();
-        }
-        public List<Customer> GetCustomers()
-        {
-            try
-            {
-                JsonString = File.ReadAllText(CustomerFilePath);
-            }
-            catch (Exception e)
-            {
-                System.Console.WriteLine(e.Message);
-                return new List<Customer>();
-            }
-            return JsonSerializer.Deserialize<List<Customer>>(JsonString);
-        }
-
         public Order GetOrder(string OrderNumber)
         {
             throw new NotImplementedException();
@@ -91,7 +73,7 @@ namespace StoreDL
             return JsonSerializer.Deserialize<List<Order>>(JsonString);
         }
 
-        public List<Order> GetOrdersFor(Customer Customer)
+        public List<Order> GetOrdersFor(User Customer)
         {
             throw new NotImplementedException();
         }
@@ -110,32 +92,6 @@ namespace StoreDL
                 return false;
             }
             return true;
-        }
-
-        public bool AddCustomer(Customer customer)
-        {
-            try {
-                List<Customer> CustomersFromFile = GetCustomers();
-                CustomersFromFile.Add(customer);
-                JsonString = JsonSerializer.Serialize(CustomersFromFile);
-                File.WriteAllText(CustomerFilePath, JsonString);
-            }
-            catch (Exception e)
-            {
-                System.Console.WriteLine(e.Message);
-                return false;
-            }
-            return true;
-        }
-
-        public Customer GetCustomer(string CustomerID)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Order GetOrder(Order order)
-        {
-            throw new NotImplementedException();
         }
 
         public bool AddStore(Store store)
