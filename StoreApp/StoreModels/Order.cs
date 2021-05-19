@@ -32,7 +32,7 @@ namespace StoreModels
         }
         public override string ToString()
         {
-            return "OrderName: " + this.OrderNumber + "\tUserName: " + this.UserName + "\nStoreID: " + this.StoreID + "\nCreated: " + this.Create;
+            return "OrderNumber: " + this.OrderNumber + "\tUserName: " + this.UserName + "\nStoreID: " + this.StoreID + "\nCreated: " + this.Create;
         }
     }
 }

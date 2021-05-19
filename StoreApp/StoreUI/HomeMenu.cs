@@ -1,19 +1,19 @@
 using System;
 using StoreModels;
 using System.Collections.Generic;
+using Serilog;
 
 namespace StoreUI
 {
     public class HomeMenu : StoreMenu
     {
-        public User CurrentUser { get; set;}
         public HomeMenu(User PassedUser)
         {
             base.CurrentUser = PassedUser;
+
         }
         public override void Start()
         {
-            StoreMenu TargetMenu = null;
             List<string> Options = new List<String>();
             StringValidator validate = new StringValidator();
             bool repeat = true;
@@ -26,9 +26,10 @@ namespace StoreUI
                 output += "["+ index++ +"] Order Product." + "\n";
                 Options.Add("Order");
 
+                // Only Displays Manager Menu if User has an employee ID
                 if (base.CurrentUser.Code != null){
                     output += "["+ index++ +"] Manager Menu." + "\n";
-                    Options.Add("EditProduct");
+                    Options.Add("Manager");
                 }
                 
                 output += "["+ index +"+] Exit." + "\n";

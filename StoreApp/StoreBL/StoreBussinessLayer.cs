@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using StoreModels;
 using StoreDL;
+using System;
 
 namespace StoreBL
 {
@@ -20,11 +21,9 @@ namespace StoreBL
         {
             return _repoDB.AddProduct(product);
         }
-        public bool AddOrder(Order order)
+        public Order AddOrder(Order order)
         {
-            _repoDB.AddOrder(order);
-            return true;
-
+            return _repoDB.AddOrder(order);
         }
 
         public Product GetProduct(string ISBN)
@@ -59,7 +58,10 @@ namespace StoreBL
 
         public Order GetOrder(Order order)
         {
-            return _repoDB.GetOrder(order);
+            Order result = _repoDB.GetOrder(order);
+            result.Transactions = GetTransactions(order.OrderNumber);
+
+            return result;
         }
 
         public bool AddTransaction(Transaction transact)
@@ -69,12 +71,57 @@ namespace StoreBL
 
         public bool RemoveProduct(Product product)
         {
-            return _repoDB.RemoveProduct(product);
+            try {
+                _repoDB.RemoveProduct(product);
+            } catch (Exception e)
+            {
+                System.Console.WriteLine(e.Message);
+                return false;
+            }
+            return true;
         }
 
         public bool UpdateProduct(Product EditedProduct)
         {
             return _repoDB.UpdateProduct(EditedProduct);
+        }
+
+        public List<Store> GetAllStores()
+        {
+            List<Store> stores = _repoDB.GetAllStores();
+            foreach(Store store in stores)
+                store.Inventory = GetInventory(store.storeID);
+            return stores;
+        }
+
+        public List<Order> GetAllOrders(int storeID)
+        {
+            List<Order> found = _repoDB.GetOrdersFor(storeID);
+
+            foreach(Order order in found)
+                order.Transactions = _repoDB.GetTransactions(order.OrderNumber);
+            
+            return found;
+        }
+
+        public List<Inventory> GetInventoryFor(int storeID)
+        {
+            return _repoDB.getInventory(storeID);
+        }
+
+        public List<Transaction> GetTransactions(int OrderNumber)
+        {
+            return _repoDB.GetTransactions(OrderNumber);
+        }
+
+        public Inventory GetInventory(int storeId, string ISBN)
+        {
+            return _repoDB.GetInventory(storeId, ISBN);
+        }
+
+        public bool UpdateInventory(Inventory inventory)
+        {
+            return _repoDB.UpdateInventory(inventory);
         }
     }
 }

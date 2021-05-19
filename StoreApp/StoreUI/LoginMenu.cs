@@ -1,7 +1,9 @@
 using StoreBL;
 using StoreDL;
 using StoreModels;
-using System.Collections.Generic;
+using Serilog;
+using System;
+
 
 namespace StoreUI
 {
@@ -15,6 +17,13 @@ namespace StoreUI
         {
             validate = new StringValidator();
             bussinessLayer = BL;
+
+            // Initialize Serilogger
+            Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .WriteTo.File("../logs/StoreApp.txt", rollingInterval : RollingInterval.Day)
+            .CreateLogger();
+
         }
         public override void Start()
         {
@@ -38,7 +47,6 @@ namespace StoreUI
                     string password = "";
                     string FirstName = "";
                     string LastName = "";
-                    int UserCode = 1;
 
                     // Collect Info Necessary to Create a new customer
                     do {
@@ -90,7 +98,16 @@ namespace StoreUI
                     string pass = validate.ValidateString(output);
 
                     // Check Input to saved Users
-                    User found = bussinessLayer.GetUser(user, pass);
+                    try {
+                        Log.Debug("Attempting to find user: {User}", user);
+
+                        User found = bussinessLayer.GetUser(user, pass);
+                    } catch (Exception e)
+                    {
+                        Log.Error(e, "Failed to find user");
+                        System.Console.WriteLine();
+                        break;
+                    }
 
                     if(user != null)
                     {
@@ -100,6 +117,7 @@ namespace StoreUI
                     }
                     else 
                     System.Console.WriteLine("Sorry, This username and Password combination is Invalid!");
+                    Log.Error("Invalid User Name " + user + " and Password " + pass + " Combination!");
                     break;
                 // Case: Exit
                 case "2":
@@ -108,6 +126,7 @@ namespace StoreUI
                 // Case: Unreachable
                 default:
                     System.Console.WriteLine("Sorry, this is not a valid option, please enter a number listed.");
+                    Log.Error("Invalid Option Recieved at LoginMenu");
                     break;
             }
             // Continue until User escapes

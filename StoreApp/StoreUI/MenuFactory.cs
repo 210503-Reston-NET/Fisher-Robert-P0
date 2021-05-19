@@ -5,6 +5,7 @@ using StoreDL;
 using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Serilog;
 
 namespace StoreUI
 {
@@ -32,6 +33,12 @@ namespace StoreUI
             // passing the options we just built
             var context = new BearlyCampingDataContext(options);
 
+            // Initialize Serilogger
+            Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .WriteTo.File("../logs/StoreApp.txt", rollingInterval : RollingInterval.Day)
+            .CreateLogger();
+
             StoreBLInterface BussinessLayer = new StoreBussinessLayer(new RepoDB(context));
 
             switch (menuType.ToLower())
@@ -44,6 +51,8 @@ namespace StoreUI
                     return new HomeMenu(CurrentUser);
                 case "order":
                     return new OrderMenu(BussinessLayer, CurrentUser);
+                case "manager":
+                    return new ManagerMenu(BussinessLayer, CurrentUser);
                 default:
                     return null;
             }

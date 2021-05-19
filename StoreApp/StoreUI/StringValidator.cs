@@ -1,10 +1,19 @@
 using System;
+using Serilog;
 using System.Text.RegularExpressions;
 
 namespace StoreUI
 {
     public class StringValidator : MyValidate
     {
+        public StringValidator()
+        {
+            // Initialize Serilogger
+            Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .WriteTo.File("../logs/StoreApp.txt", rollingInterval : RollingInterval.Day)
+            .CreateLogger();
+        }
         /// <summary>
         /// Takes in a prompt and recieves a user's input. Validates input as a string
         /// </summary>
@@ -58,12 +67,14 @@ namespace StoreUI
             {
                 try 
                 {
+                    Log.Debug("Attempting to parse a Double from a string.");
                     Console.WriteLine(prompt);
                     response = double.Parse(Regex.Replace(Console.ReadLine(), "[^.0-9_]+", " "));
 
                     repeat = false;
                 } catch(Exception e)
                 {
+                    Log.Error(e.Message, "Failed to Parse Double in MyValidate.ValidateDouble() Method");
                     System.Console.WriteLine(e.Message);
                     System.Console.WriteLine("Please input a vaild Price (Include Integers and Decimal Points");
                 }
@@ -79,12 +90,14 @@ namespace StoreUI
             {
                 try 
                 {
+                    Log.Debug("Attempting to parse a Decimal from a string.");
                     Console.WriteLine(prompt);
                     response = decimal.Parse(Regex.Replace(Console.ReadLine(), "[^.0-9_]+", " "));
 
                     repeat = false;
                 } catch(Exception e)
                 {
+                    Log.Error(e.Message, "Failed to Parse Decimal in MyValidate.ValidateDecimal() Method");
                     System.Console.WriteLine(e.Message);
                     System.Console.WriteLine("Please input a vaild Price (Include Integers and Decimal Points");
                 }

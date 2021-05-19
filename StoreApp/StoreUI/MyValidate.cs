@@ -8,5 +8,6 @@ namespace StoreUI
         double ValidateDouble (string prompt);
         int ValidateInteger (string promt);
         decimal ValidateDecimal (string prompt);
+
     }
 }

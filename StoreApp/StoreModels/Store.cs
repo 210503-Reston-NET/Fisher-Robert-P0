@@ -17,6 +17,10 @@ namespace StoreModels
             this.Inventory = new List<Inventory>();
             this.storeID = -1;
         }
+        public Store (string StoreCity, string StoreState, int storeID): this(StoreCity, StoreState)
+        {
+            this.storeID = storeID;
+        }
         public Store (string StoreName, string Address, List<Inventory> inventory) : this(StoreName, Address)
         {
             this.Inventory = inventory;

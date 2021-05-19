@@ -17,7 +17,7 @@ namespace StoreModels
         }
         public override string ToString()
         {
-            return this.Quantity + ""; 
+            return "Quantity: " + this.Quantity + " ISBN: " + this.ISBN + " OrderNumber: " + this.OrderNumber; 
         }
 
     }

@@ -14,6 +14,8 @@ namespace StoreUI
         public EditProductMenu(StoreBLInterface BL)
         {
             this.bussinessLayer = BL;
+
+            
         }
         public override void Start()
         {
@@ -27,8 +29,7 @@ namespace StoreUI
                 output += "[1] Remove Product." + "\n";
                 output += "[2] Find Product." + "\n";
                 output += "[3] Edit Product." + "\n";
-                output += "[4] Search Users." + "\n";
-                output += "[5] Exit." + "\n";
+                output += "[4] Exit." + "\n";
                 string input = validate.ValidateString(output);
 
                 switch(input)
@@ -65,16 +66,9 @@ namespace StoreUI
                             if(bussinessLayer.UpdateProduct(EditedProduct))
                                 System.Console.WriteLine("Succesfully edited Product!");
                         break;
-                    // Case Search Customer
-                    case "4":
-                        output = "Enter the name you wish to search.";
-                        string GivenName = validate.ValidateString(output);
-
-                        
-                        break;
                     
                     // Case: Exit
-                    case "5":
+                    case "4":
                         repeat = false;
                         break;
                     // Case Invalid Entry
