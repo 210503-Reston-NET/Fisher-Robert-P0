@@ -31,7 +31,7 @@ namespace StoreDL.Entities
             modelBuilder.Entity<Account>(entity =>
             {
                 entity.HasKey(e => e.UserName)
-                    .HasName("PK__Accounts__C9F284575E904043");
+                    .HasName("PK__Accounts__C9F284570F352B70");
 
                 entity.Property(e => e.UserName)
                     .HasMaxLength(30)
@@ -63,7 +63,7 @@ namespace StoreDL.Entities
             modelBuilder.Entity<Inventory>(entity =>
             {
                 entity.HasKey(e => new { e.StoreId, e.Isbn })
-                    .HasName("PK__Inventor__9FC5238F0DA98ADD");
+                    .HasName("PK__Inventor__9FC5238F849DFDA7");
 
                 entity.ToTable("Inventory");
 
@@ -78,19 +78,19 @@ namespace StoreDL.Entities
                     .WithMany(p => p.Inventories)
                     .HasForeignKey(d => d.Isbn)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Inventory__ISBN__68D28DBC");
+                    .HasConstraintName("FK__Inventory__ISBN__1A69E950");
 
                 entity.HasOne(d => d.Store)
                     .WithMany(p => p.Inventories)
                     .HasForeignKey(d => d.StoreId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Inventory__Store__67DE6983");
+                    .HasConstraintName("FK__Inventory__Store__1975C517");
             });
 
             modelBuilder.Entity<Order>(entity =>
             {
                 entity.HasKey(e => e.OrderNumber)
-                    .HasName("PK__Orders__CAC5E742D09C3127");
+                    .HasName("PK__Orders__CAC5E7423255B9BB");
 
                 entity.Property(e => e.DateCreated).HasColumnType("date");
 
@@ -109,19 +109,19 @@ namespace StoreDL.Entities
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.StoreId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Orders__StoreID__61316BF4");
+                    .HasConstraintName("FK__Orders__StoreID__12C8C788");
 
                 entity.HasOne(d => d.UserNameNavigation)
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.UserName)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Orders__UserName__603D47BB");
+                    .HasConstraintName("FK__Orders__UserName__11D4A34F");
             });
 
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.HasKey(e => e.Isbn)
-                    .HasName("PK__Products__447D36EB39395532");
+                    .HasName("PK__Products__447D36EBD663E6D0");
 
                 entity.Property(e => e.Isbn)
                     .HasMaxLength(13)
@@ -152,7 +152,7 @@ namespace StoreDL.Entities
             modelBuilder.Entity<Transaction>(entity =>
             {
                 entity.HasKey(e => new { e.Isbn, e.OrderNumber })
-                    .HasName("PK__Transact__78D1689F4E5DB6E5");
+                    .HasName("PK__Transact__78D1689F78F93B21");
 
                 entity.Property(e => e.Isbn)
                     .HasMaxLength(13)
@@ -163,13 +163,13 @@ namespace StoreDL.Entities
                     .WithMany(p => p.Transactions)
                     .HasForeignKey(d => d.Isbn)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Transactio__ISBN__640DD89F");
+                    .HasConstraintName("FK__Transactio__ISBN__15A53433");
 
                 entity.HasOne(d => d.OrderNumberNavigation)
                     .WithMany(p => p.Transactions)
                     .HasForeignKey(d => d.OrderNumber)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Transacti__Order__6501FCD8");
+                    .HasConstraintName("FK__Transacti__Order__1699586C");
             });
 
             OnModelCreatingPartial(modelBuilder);

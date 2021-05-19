@@ -123,5 +123,10 @@ namespace StoreBL
         {
             return _repoDB.UpdateInventory(inventory);
         }
+
+        public List<Order> GetAllOrders(User user)
+        {
+            return _repoDB.GetOrdersFor(user);
+        }
     }
 }

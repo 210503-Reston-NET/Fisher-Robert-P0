@@ -22,6 +22,7 @@ namespace StoreBL
         List<Store> GetAllStores();
         Order GetOrder(Order order);
         List<Order> GetAllOrders(int storeID);
+        List<Order> GetAllOrders(User user);
         List<Inventory> GetInventoryFor(int storeID);
         List<Transaction> GetTransactions(int OrderNumber);
     }

@@ -16,7 +16,7 @@ namespace StoreDL.Entities
         public DateTime DateCreated { get; set; }
         public string UserName { get; set; }
         public int StoreId { get; set; }
-        public decimal? Total { get; set; }
+        public decimal Total { get; set; }
 
         public virtual Store Store { get; set; }
         public virtual Account UserNameNavigation { get; set; }

@@ -53,6 +53,8 @@ namespace StoreUI
                     return new OrderMenu(BussinessLayer, CurrentUser);
                 case "manager":
                     return new ManagerMenu(BussinessLayer, CurrentUser);
+                case "customerorders":
+                    return new CustomerOrdersMenu(BussinessLayer, CurrentUser);
                 default:
                     return null;
             }

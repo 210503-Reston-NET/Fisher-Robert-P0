@@ -57,7 +57,24 @@ namespace StoreUI
             foreach (User account in users)
                 System.Console.WriteLine("[" + index++ + "] " + account.UserName);
             
-            return validate.ValidateString("");
+            int userInput = validate.ValidateInteger("");
+
+            List<Order> orders = bussinessLayer.GetAllOrders(users[userInput]);
+
+            foreach(Order order in orders){
+                order.Transactions = bussinessLayer.GetTransactions(order.OrderNumber);
+            }
+
+            foreach(Order order in orders){
+                System.Console.WriteLine("--------Order: " + order.OrderNumber + "--------");
+                System.Console.WriteLine(order);
+                System.Console.WriteLine("\t----Transactions----");
+                foreach(Transaction transact in order.Transactions)
+                {
+                    System.Console.WriteLine("\t" + transact);
+                }
+            }
+            return "";
         }
 
         public string SearchStore()

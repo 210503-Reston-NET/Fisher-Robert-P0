@@ -26,6 +26,9 @@ namespace StoreUI
                 output += "["+ index++ +"] Order Product." + "\n";
                 Options.Add("Order");
 
+                output += "[" + index++ +"] View Orders." + "\n";
+                Options.Add("CustomerOrders");
+
                 // Only Displays Manager Menu if User has an employee ID
                 if (base.CurrentUser.Code != null){
                     output += "["+ index++ +"] Manager Menu." + "\n";

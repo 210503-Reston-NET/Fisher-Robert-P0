@@ -10,21 +10,21 @@ namespace StoreModels
         public int StoreID { get; set; }
         public DateTime Create { get; set;}
         public List<Transaction> Transactions { get; set;}
-        public decimal? Total { get; set; }
+        public decimal Total { get; set; }
         
         public Order(){
             this.Create = DateTime.Now;
         }
-        public Order(int OrderNumber, int StoreId, string CustomerId, decimal? total, DateTime Created): this(StoreId, CustomerId, total)
+        public Order(int OrderNumber, int StoreId, string CustomerId, decimal total, DateTime Created): this(StoreId, CustomerId, total)
         {
             this.OrderNumber = OrderNumber;
             this.Create = Created;
         }
-        public Order(int OrderNumber, int StoreId, string CustomerId, decimal? total, List<Transaction> transacitons): this(OrderNumber, StoreId, CustomerId, total, DateTime.Now)
+        public Order(int OrderNumber, int StoreId, string CustomerId, decimal total, List<Transaction> transacitons): this(OrderNumber, StoreId, CustomerId, total, DateTime.Now)
         {
             this.Transactions = transacitons;
         }
-        public Order(int StoreId, string CustomerId, decimal? total)
+        public Order(int StoreId, string CustomerId, decimal total)
         {
             this.StoreID = StoreID;
             this.UserName = CustomerId;

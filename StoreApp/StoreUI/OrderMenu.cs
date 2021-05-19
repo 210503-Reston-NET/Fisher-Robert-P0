@@ -26,7 +26,7 @@ namespace StoreUI
         public override void Start()
         {
             bool repeat = true;
-            decimal? total = 0.00M;
+            decimal total = 0.00M;
             string city;
             string state;
             List<Inventory> StoreStock;
