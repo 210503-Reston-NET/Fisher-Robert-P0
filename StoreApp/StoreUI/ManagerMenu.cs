@@ -121,6 +121,23 @@ namespace StoreUI
                     "\tCost: " + relatedProduct.Price + "\tQuantity: " + inventory.Quantity);
                 }
                 break;
+
+                case 2:
+                List<Inventory> inventorie = bussinessLayer.GetInventoryFor(selectedStore.storeID);
+
+                foreach(Inventory inventory in inventorie){
+                    relatedProduct = bussinessLayer.GetProduct(inventory.ISBN);
+                    System.Console.WriteLine("Product#: " + inventory.ISBN + "\tProductName: " + relatedProduct.Name +
+                    "\tCost: " + relatedProduct.Price + "\tQuantity: " + inventory.Quantity);
+
+                    output = "Enter the new Quantity for the transaction";
+                    userInput = validate.ValidateInteger(output);
+
+                    inventory.Quantity = userInput;
+
+                    bussinessLayer.UpdateInventory(inventory);
+                }
+                break;
                 default:
                 break;
             
